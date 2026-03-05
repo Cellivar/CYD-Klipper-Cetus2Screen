@@ -1,0 +1,106 @@
+{
+    "build": {
+        "arduino": {
+            "ldscript": "esp32s2_out.ld",
+            "memory_type": "qio_opi"
+        },
+        "core": "esp32",
+        "mcu": "esp32s2",
+        "variant": "esp32s2",
+        "f_cpu": "240000000L",
+        "f_flash": "80000000L",
+        "flash_mode": "qio",
+        "extra_flags": [
+            "'-D TFT_CS=10'",
+            "'-D TFT_SCLK=1'",
+            "'-D TFT_MISO=2'",
+            "'-D TFT_MOSI=3'",
+            "'-D TFT_DC=9'",
+            "'-D TFT_RST=8'",
+            "'-D TFT_BUSY=GPIO_NUM_NC'",
+            "'-D TFT_SPI_HOST=SPI3_HOST'",
+            "'-D TFT_SPI_MODE=SPI_MODE0'",
+            "'-D SPI_FREQUENCY=80000000'",
+            "'-D SPI_READ_FREQUENCY=20000000'",
+            "'-D SPI_TOUCH_FREQUENCY=2500000'",
+
+            "'-D CYD_SCREEN_HEIGHT_PX=320'",
+            "'-D CYD_SCREEN_WIDTH_PX=480'",
+            "'-D CYD_BOARD_CETUS2_SCREEN=1'",
+            "'-D CYD_SCREEN_GAP_PX=8'",
+            "'-D CYD_SCREEN_FONT=lv_font_montserrat_16'",
+            "'-D CYD_SCREEN_FONT_SMALL=lv_font_montserrat_12'",
+            "'-D CYD_SCREEN_SIDEBAR_SIZE_PX=50'",
+            "'-D CYD_SCREEN_MIN_BUTTON_HEIGHT_PX=45'",
+            "'-D CYD_SCREEN_MIN_BUTTON_WIDTH_PX=45'",
+
+            "'-D BOARD_HAS_TF'",
+            "'-D TF_CS=0'",
+            "'-D TF_SPI_SCLK=1'",
+            "'-D TF_SPI_MISO=2'",
+            "'-D TF_SPI_MOSI=3'",
+
+            "'-D USER_SETUP_LOADED'",
+            "'-D ARDUINO_USB_MODE'",
+            "'-D ARDUINO_USB_CDC_ON_BOOT=1'",
+
+            "'-D HAS_BUZZER'",
+            "'-D BUZZER_PIN=36'",
+
+            "'-D BOARD_HAS_TOUCH'",
+            "'-D TOUCH_XPT2046_SPI'",
+            "'-D XPT2046_SPI_HOST=SPI3_HOST'",
+            "'-D XPT2046_SPI_DMA_CHANNEL=SPI_DMA_CH_AUTO'",
+            "'-D XPT2046_SPI_BUS_MOSI_IO_NUM=3'",
+            "'-D XPT2046_SPI_BUS_MISO_IO_NUM=2'",
+            "'-D XPT2046_SPI_BUS_SCLK_IO_NUM=1'",
+            "'-D XPT2046_SPI_BUS_QUADWP_IO_NUM=GPIO_NUM_NC'",
+            "'-D XPT2046_SPI_BUS_QUADHD_IO_NUM=GPIO_NUM_NC'",
+            "'-D XPT2046_SPI_CONFIG_CS_GPIO_NUM=33'",
+            "'-D XPT2046_SPI_CONFIG_DC_GPIO_NUM=GPIO_NUM_NC'",
+            "'-D XPT2046_SPI_CONFIG_SPI_MODE=SPI_MODE0'",
+            "'-D XPT2046_SPI_CONFIG_PCLK_HZ=2000000'",
+            "'-D XPT2046_SPI_CONFIG_TRANS_QUEUE_DEPTH=3'",
+            "'-D XPT2046_SPI_CONFIG_LCD_CMD_BITS=8'",
+            "'-D XPT2046_SPI_CONFIG_LCD_PARAM_BITS=8'",
+            "'-D XPT2046_SPI_CONFIG_FLAGS_DC_AS_CMD_PHASE=false'",
+            "'-D XPT2046_SPI_CONFIG_FLAGS_DC_LOW_ON_DATA=false'",
+            "'-D XPT2046_SPI_CONFIG_FLAGS_OCTAL_MODE=false'",
+            "'-D XPT2046_SPI_CONFIG_FLAGS_LSB_FIRST=false'",
+            "'-D XPT2046_TOUCH_CONFIG_X_MAX=LCD_WIDTH'",
+            "'-D XPT2046_TOUCH_CONFIG_Y_MAX=LCD_HEIGHT'",
+            "'-D XPT2046_TOUCH_CONFIG_RST_GPIO_NUM=GPIO_NUM_NC'",
+            "'-D XPT2046_TOUCH_CONFIG_INT_GPIO_NUM=GPIO_NUM_NC'",
+            "'-D XPT2046_TOUCH_CONFIG_LEVELS_RESET=0'",
+            "'-D XPT2046_TOUCH_CONFIG_LEVELS_INTERRUPT=0'",
+            "'-D TOUCH_SWAP_XY=true'",
+            "'-D TOUCH_SWAP_X=true'",
+            "'-D TOUCH_SWAP_Y=false'"
+        ],
+        "hwids": [
+            [
+                "0X303A",
+                "0x0002"
+            ]
+        ]
+    },
+    "upload": {
+        "flash_size": "4MB",
+        "flash_mode": "qio",
+        "maximum_ram_size": 327680,
+        "maximum_size": 4194304,
+        "require_upload_port": true,
+        "speed": 460800
+    },
+    "frameworks": [
+        "arduino",
+        "espidf"
+    ],
+    "connectivity": [
+        "wifi",
+        "bluetooth"
+    ],
+    "name": "ESP32-S2-Cetus2-Screen",
+    "vendor": "TierTime",
+    "url": "https://www.tiertime.com"
+}
