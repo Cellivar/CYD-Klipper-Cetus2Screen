@@ -87,7 +87,7 @@ int macros_add_power_devices_to_panel(lv_obj_t * root_panel, BasePrinter* printe
 void macros_draw_power_fullscreen(BasePrinter* printer)
 {
     lv_obj_t * parent = lv_create_empty_panel(lv_scr_act());
-    lv_obj_set_style_bg_opa(parent, LV_OPA_100, 0); 
+    lv_obj_set_style_bg_opa(parent, LV_OPA_100, 0);
     lv_obj_align(parent, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_obj_set_size(parent, CYD_SCREEN_WIDTH_PX, CYD_SCREEN_HEIGHT_PX);
     lv_layout_flex_column(parent);

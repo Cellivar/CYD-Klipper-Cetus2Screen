@@ -12,13 +12,13 @@
 #include "ui/ota_setup.h"
 
 void setup() {
-    Serial.begin(115200);
+    Serial1.begin(115200);
     serial_console::greet();
     load_global_config();
     screen_setup();
     lv_setup();
     LOG_LN("Screen init done");
-    
+
     wifi_init();
     ota_init();
     ip_init();

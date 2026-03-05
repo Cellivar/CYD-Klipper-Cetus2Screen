@@ -50,7 +50,7 @@ void lv_touch_intercept_calibration(lv_indev_drv_t *indev_driver, lv_indev_data_
         lv_coord_t local_point[] = {data->point.x, data->point.y};
         while (data->state == LV_INDEV_STATE_PR){
             original_touch_driver(indev_driver, data);
-            delay(20);    
+            delay(20);
         }
 
         point[0] = local_point[0];
@@ -101,8 +101,8 @@ void lv_do_calibration(){
     lv_obj_t * line_x = lv_line_create(lv_scr_act());
     lv_obj_t * line_y = lv_line_create(lv_scr_act());
 
-    static lv_point_t line_points_x[] = { {0, 10}, {21, 10} };
-    static lv_point_t line_points_y[] = { {10, 0}, {10, 21} };
+    static lv_point_precise_t line_points_x[] = { {0, 10}, {21, 10} };
+    static lv_point_precise_t line_points_y[] = { {10, 0}, {10, 21} };
 
     lv_line_set_points(line_x, line_points_x, 2);
     lv_obj_set_style_line_width(line_x, 1, 0);
@@ -111,12 +111,12 @@ void lv_do_calibration(){
 
 #ifdef CYD_SCREEN_DRIVER_ESP32_SMARTDISPLAY
     lv_obj_align(line_x, LV_ALIGN_TOP_RIGHT, 1, 0);
-    lv_obj_align(line_y, LV_ALIGN_TOP_RIGHT, -10, 0);        
+    lv_obj_align(line_y, LV_ALIGN_TOP_RIGHT, -10, 0);
 #else
     lv_obj_align(line_x, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_obj_align(line_y, LV_ALIGN_TOP_LEFT, 0, 0);
 #endif
-    
+
     while (true){
         lv_handler();
         serial_console::run();
@@ -143,7 +143,7 @@ void lv_do_calibration(){
     lv_obj_set_style_line_width(line_x, 1, 0);
     lv_obj_set_style_line_width(line_y, 1, 0);
 
-    
+
 #ifdef CYD_SCREEN_DRIVER_ESP32_SMARTDISPLAY
     lv_obj_align(line_x, LV_ALIGN_BOTTOM_LEFT, 0, -10);
     lv_obj_align(line_y, LV_ALIGN_BOTTOM_LEFT, 0, 1);
@@ -295,7 +295,6 @@ void lv_setup()
     
     screen_timer_setup();
     screen_timer_start();
-    lv_png_init();
 }
 
 bool is_screen_asleep()

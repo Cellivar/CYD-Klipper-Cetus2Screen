@@ -118,9 +118,9 @@ extern GlobalConfig global_config;
 extern TemporaryConfig temporary_config;
 extern ColorDefinition color_defs[];
 
-#define LOG(x) if(temporary_config.debug){ Serial.print(x);}
-#define LOG_LN(x) if(temporary_config.debug){ Serial.println(x);}
-#define LOG_F(x) if(temporary_config.debug){ Serial.printf x ;}   // use with double braces, LOF_F(("x=%d\n",x));
+#define LOG(x) if(temporary_config.debug){ Serial1.print(x);}
+#define LOG_LN(x) if(temporary_config.debug){ Serial1.println(x);}
+#define LOG_F(x) if(temporary_config.debug){ Serial1.printf x ;}   // use with double braces, LOF_F(("x=%d\n",x));
 
 void write_global_config();
 void verify_version();

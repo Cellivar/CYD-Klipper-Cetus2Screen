@@ -5,9 +5,9 @@
 #include "../core/printer_integration.hpp"
 
 lv_obj_t* lv_create_empty_panel(lv_obj_t* root) {
-    lv_obj_t* panel = lv_obj_create(root); 
-    lv_obj_set_style_border_width(panel, 0, 0); 
-    lv_obj_set_style_bg_opa(panel, LV_OPA_TRANSP, 0); 
+    lv_obj_t* panel = lv_obj_create(root);
+    lv_obj_set_style_border_width(panel, 0, 0);
+    lv_obj_set_style_bg_opa(panel, LV_OPA_TRANSP, 0);
     lv_obj_set_style_pad_all(panel, 0, 0);
     lv_obj_set_style_radius(panel, 0, 0);
     return panel;
@@ -116,7 +116,7 @@ void lv_keyboard_text_entry_close(lv_event_t * e){
 void lv_create_keyboard_text_entry(lv_event_cb_t keyboard_callback, const char* title, lv_keyboard_mode_t keyboard_mode, lv_coord_t width, uint8_t max_length, const char* fill_text, bool contain_in_panel)
 {
     lv_obj_t * parent = lv_create_empty_panel(lv_scr_act());
-    lv_obj_set_style_bg_opa(parent, LV_OPA_50, 0); 
+    lv_obj_set_style_bg_opa(parent, LV_OPA_50, 0);
     lv_obj_align(parent, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_layout_flex_column(parent, LV_FLEX_ALIGN_SPACE_BETWEEN);
     lv_obj_clear_flag(parent, LV_OBJ_FLAG_SCROLLABLE);
@@ -166,7 +166,7 @@ void lv_create_keyboard_text_entry(lv_event_cb_t keyboard_callback, const char* 
     lv_keyboard_set_textarea(keyboard, ta);
 }
 
-const static lv_point_t line_points[] = { {0, 0}, {(short int)((CYD_SCREEN_PANEL_WIDTH_PX - CYD_SCREEN_GAP_PX * 2) * 0.85f), 0} };
+const static lv_point_precise_t line_points[] = { {0, 0}, {(short int)((CYD_SCREEN_PANEL_WIDTH_PX - CYD_SCREEN_GAP_PX * 2) * 0.85f), 0} };
 
 void lv_create_custom_menu_entry(const char* label_text, lv_obj_t* object, lv_obj_t* root_panel, bool set_height, const char * comment)
 {
@@ -181,7 +181,7 @@ void lv_create_custom_menu_entry(const char* label_text, lv_obj_t* object, lv_ob
 
     lv_obj_set_parent(object, panel);
 
-    if (set_height) 
+    if (set_height)
     {
         lv_obj_set_height(object, CYD_SCREEN_MIN_BUTTON_HEIGHT_PX);
     }
@@ -254,18 +254,18 @@ void on_timer_destroy(lv_event_t * e)
 
 void timer_callback(lv_timer_t *timer)
 {
-    lv_obj_t * panel = (lv_obj_t *)timer->user_data;
+    lv_obj_t * panel = (lv_obj_t *)lv_timer_get_user_data(timer);
     lv_obj_del(panel);
 }
 
 void lv_create_popup_message(const char* message, uint16_t timeout_ms)
 {
-    if (message == nullptr || timer != NULL) 
+    if (message == nullptr || timer != NULL)
     {
         return;
     }
 
-    lv_obj_t* panel = lv_obj_create(lv_scr_act()); 
+    lv_obj_t* panel = lv_obj_create(lv_scr_act());
     lv_obj_set_style_pad_all(panel, CYD_SCREEN_GAP_PX, CYD_SCREEN_GAP_PX);
     lv_obj_set_size(panel, CYD_SCREEN_PANEL_WIDTH_PX - CYD_SCREEN_GAP_PX * 2, LV_SIZE_CONTENT);
     lv_layout_flex_column(panel, LV_FLEX_ALIGN_CENTER);

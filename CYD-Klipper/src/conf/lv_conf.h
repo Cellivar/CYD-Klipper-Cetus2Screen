@@ -17,8 +17,6 @@
 #ifndef LV_CONF_H
 #define LV_CONF_H
 
-#include <stdint.h>
-
 /*====================
    COLOR SETTINGS
  *====================*/
@@ -529,6 +527,8 @@
 
 #define LV_USE_WIN        0
 
+#define LV_USE_FLOAT      1
+
 #define LV_USE_SPAN       0
 #if LV_USE_SPAN
     /*A line text can contain maximum num of span descriptor */
@@ -607,7 +607,7 @@
 #endif
 
 /*PNG decoder library*/
-#define LV_USE_PNG 1
+#define LV_USE_LODEPNG 1
 
 /*BMP decoder library*/
 #define LV_USE_BMP 0

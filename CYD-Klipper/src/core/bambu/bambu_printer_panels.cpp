@@ -48,7 +48,7 @@ static void set_fan_speed(lv_event_t* e, FanIndex index)
 {
     int speed = (int)lv_event_get_user_data(e);
     int actual_speed = fan_percent_to_byte(speed);
-    BambuPrinter* printer = (BambuPrinter*)get_current_printer(); // TODO: pass by ref 
+    BambuPrinter* printer = (BambuPrinter*)get_current_printer(); // TODO: pass by ref
     char buff[20];
     sprintf(buff, "M106 P%d S%d", index, actual_speed);
     printer->send_gcode(buff);
@@ -101,7 +101,7 @@ static void set_speed_mult_text(lv_event_t * e){
 static void set_speed_mult(lv_event_t * e)
 {
     BambuSpeedProfile speed = (BambuSpeedProfile)((int)lv_event_get_user_data(e));
-    BambuPrinter* printer = (BambuPrinter*)get_current_printer(); // TODO: pass by ref 
+    BambuPrinter* printer = (BambuPrinter*)get_current_printer(); // TODO: pass by ref
     char buff[128];
 
     sprintf(buff, COMMAND_SET_PRINT_SPEED, speed);
@@ -142,20 +142,20 @@ void BambuPrinter::init_ui_panels()
     custom_menus = bambu_ui_panels;
 }
 
-struct 
+struct
 {
     const char* bambu_current_file;
 
-    union 
+    union
     {
-        struct 
+        struct
         {
             bool bambu_option_use_ams : 1;
             bool bambu_option_timelapse : 1;
             bool bambu_option_bed_leveling : 1;
             bool bambu_option_flow_calibration : 1;
             bool bambu_option_vibration_compensation : 1;
-            bool bambu_option_layer_inspect : 1;        
+            bool bambu_option_layer_inspect : 1;
         };
         unsigned char bambu_options_raw;
     };
@@ -177,7 +177,7 @@ static void print_file_start(lv_event_t * e)
     BambuPrinter* printer = (BambuPrinter*)get_current_printer();
     char buff[713];
 
-    if (snprintf(buff, 713, COMMAND_START_PRINT_3MF, 
+    if (snprintf(buff, 713, COMMAND_START_PRINT_3MF,
         __internal_bambu_file_state.bambu_current_file,
         BOOLEAN_TO_STRING(__internal_bambu_file_state.bambu_option_timelapse),
         BOOLEAN_TO_STRING(__internal_bambu_file_state.bambu_option_bed_leveling),
@@ -200,7 +200,7 @@ bool BambuPrinter::start_file(const char* filename){
     }
 
     __internal_bambu_file_state.bambu_current_file = filename;
-    
+
     lv_obj_t * panel = lv_obj_create(lv_scr_act());
     lv_obj_set_style_pad_all(panel, CYD_SCREEN_GAP_PX * 2, 0);
     lv_layout_flex_column(panel);
@@ -217,7 +217,7 @@ bool BambuPrinter::start_file(const char* filename){
     __internal_bambu_file_state.bambu_option_bed_leveling = true;
     __internal_bambu_file_state.bambu_option_flow_calibration = true;
     __internal_bambu_file_state.bambu_option_vibration_compensation = true;
-    __internal_bambu_file_state.bambu_option_layer_inspect = true;      
+    __internal_bambu_file_state.bambu_option_layer_inspect = true;
 
     if (__internal_bambu_file_state.bambu_option_use_ams)
     {

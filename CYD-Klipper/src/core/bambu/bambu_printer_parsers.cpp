@@ -41,29 +41,29 @@ void BambuPrinter::parse_state(JsonDocument& in)
                 client.setConnectTimeout(1000);
 
                 LOG_F(("Free heap: %d bytes\n", esp_get_free_heap_size()))
-    
+
                 char buff[10] = {0};
                 sprintf(buff, "%X_%X", error >> 16, error & 0xFFFF);
                 int http_status_code = 0;
-    
-                try 
-                {
+
+                // try
+                // {
                     client.begin("http://bambu.suchmeme.nl/" + String(buff));
                     LOG_F(("Sending request to http://bambu.suchmeme.nl/%s", buff));
                     http_status_code = client.GET();
                     LOG_F(("Response: %d", http_status_code));
-                }
-                catch (...)
-                {
-                    LOG_LN("Error downloading error code page");
-                }
-    
+                // }
+                // catch (...)
+                // {
+                //     LOG_LN("Error downloading error code page");
+                // }
+
                 if (http_status_code == 200)
                 {
                     printer_data.state_message = (char *)malloc(client.getSize() + 20);
                     sprintf(printer_data.state_message, "%s: %s", buff, client.getString().c_str());
                 }
-                else 
+                else
                 {
                     printer_data.state_message = (char *)malloc(20);
                     sprintf(printer_data.state_message, "Error: %s", buff);
@@ -245,7 +245,7 @@ bool wifi_client_response_pass(WiFiClientSecure& client)
 {
     unsigned long _m = millis();
     bool first_char = true;
-    while (!client.available() && millis() < _m + 500) delay(1);   
+    while (!client.available() && millis() < _m + 500) delay(1);
 
     if(!client.available())
     {
@@ -256,7 +256,7 @@ bool wifi_client_response_pass(WiFiClientSecure& client)
 
     LOG_LN("[FTPS response]");
     bool response = true;
-    while (client.available()) 
+    while (client.available())
     {
         char byte = client.read();
 
@@ -277,7 +277,7 @@ bool wifi_client_response_pass(WiFiClientSecure& client)
 bool wifi_client_response_parse(WiFiClientSecure& client, std::list<char*> &files, int max_files)
 {
     unsigned long _m = millis();
-    while (!client.available() && millis() < _m + 500) delay(1);   
+    while (!client.available() && millis() < _m + 500) delay(1);
 
     if(!client.available())
     {
@@ -315,7 +315,7 @@ bool wifi_client_response_parse(WiFiClientSecure& client, std::list<char*> &file
                         files.pop_back();
                     }
                 }
-                else 
+                else
                 {
                     LOG_LN("Failed to allocate memory");
                 }
@@ -323,7 +323,7 @@ bool wifi_client_response_parse(WiFiClientSecure& client, std::list<char*> &file
 
             index = 0;
         }
-        else 
+        else
         {
             index++;
         }
@@ -353,7 +353,7 @@ Files BambuPrinter::parse_files(WiFiClientSecure& wifi_client, int max_files)
     }
 
     wifi_client_response_pass(wifi_client);
-    
+
     char auth_code_buff[16] = {0};
     sprintf(auth_code_buff, "PASS %d", printer_config->klipper_port);
     send_command_without_response(wifi_client, "USER bblp");
@@ -386,9 +386,9 @@ Files BambuPrinter::parse_files(WiFiClientSecure& wifi_client, int max_files)
 
         result.success = true;
         LOG_F(("Heap space post-file-parse: %d bytes\n", esp_get_free_heap_size()))
-        LOG_F(("Got %d files. Request took %dms, parsing took %dms\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
-    }   
-    else 
+        LOG_F(("Got %d files. Request took %lums, parsing took %lums\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
+    }
+    else
     {
         LOG_LN("Failed to fetch files: data connection failed");
     }

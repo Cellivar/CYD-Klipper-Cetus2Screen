@@ -68,35 +68,35 @@ enum PrinterState {
 };
 
 typedef struct _PrinterData {
-        union {
-            struct {
-                bool can_extrude : 1;
-                bool homed_axis : 1;
-                bool absolute_coords : 1;
-            };
-            unsigned char rawState;
+    union {
+        struct {
+            bool can_extrude : 1;
+            bool homed_axis : 1;
+            bool absolute_coords : 1;
         };
-        PrinterState state;
-        char* state_message;
-        char* popup_message;
-        float temperatures[10];
-        float target_temperatures[10];
-        float position[3];
-        float elapsed_time_s;
-        float printed_time_s;
-        float remaining_time_s;
-        float filament_used_mm;
-        char* print_filename; 
-        float print_progress; // 0 -> 1
-        float fan_speed; // 0 -> 1
-        float speed_mult;
-        float extrude_mult;
-        int total_layers;
-        int current_layer;
-        float pressure_advance;
-        float smooth_time;
-        int feedrate_mm_per_s;
-        PrinterFeatures error_screen_features;
+        unsigned char rawState;
+    };
+    PrinterState state;
+    char* state_message;
+    char* popup_message;
+    float temperatures[10];
+    float target_temperatures[10];
+    float position[3];
+    float elapsed_time_s;
+    float printed_time_s;
+    float remaining_time_s;
+    float filament_used_mm;
+    char* print_filename;
+    float print_progress; // 0 -> 1
+    float fan_speed; // 0 -> 1
+    float speed_mult;
+    float extrude_mult;
+    int total_layers;
+    int current_layer;
+    float pressure_advance;
+    float smooth_time;
+    int feedrate_mm_per_s;
+    PrinterFeatures error_screen_features;
 } PrinterData;
 
 typedef struct {
@@ -142,12 +142,12 @@ enum HttpRequestType
     HttpGet
 };
 
-class BasePrinter 
+class BasePrinter
 {
     protected:
         unsigned char config_index{};
         PrinterData printer_data{};
-        
+
     public:
         short popup_message_timeout_s = 10;
         bool no_confirm_print_file = false;

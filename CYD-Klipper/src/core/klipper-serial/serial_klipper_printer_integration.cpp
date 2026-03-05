@@ -7,17 +7,17 @@ void clear_serial_buffer(bool can_rely_on_newline_terminator = true)
 {
     if (can_rely_on_newline_terminator)
     {
-        if (Serial.available())
+        if (Serial1.available())
         {
-            while (Serial.read() != '\n')
+            while (Serial1.read() != '\n')
                 ;
         }
     }
-    else 
+    else
     {
-        while (Serial.available())
+        while (Serial1.available())
         {
-            Serial.read();
+            Serial1.read();
         }
     }
 }
@@ -32,34 +32,34 @@ bool make_serial_request(JsonDocument &out, int timeout_ms, HttpRequestType requ
     clear_serial_buffer();
 
     // TODO: Add semaphore here
-    if (!Serial.availableForWrite())
+    if (!Serial1.availableForWrite())
     {
         return false;
     }
 
-    Serial.printf("HTTP_REQUEST %d %s %s\n", timeout_ms, requestType == HttpGet ? "GET" : "POST", endpoint);
+    Serial1.printf("HTTP_REQUEST %d %s %s\n", timeout_ms, requestType == HttpGet ? "GET" : "POST", endpoint);
 
     if (timeout_ms <= 0)
     {
         return true;
     }
     unsigned long _m = millis();
-    while (!Serial.available() && millis() < _m + timeout_ms + 10) delay(1);
+    while (!Serial1.available() && millis() < _m + timeout_ms + 10) delay(1);
 
-    if (!Serial.available())
+    if (!Serial1.available())
     {
-        Serial.println("Timeout...");
+        Serial1.println("Timeout...");
         return false;
     }
 
-    Serial.readBytes(buff, 4);
+    Serial1.readBytes(buff, 4);
     buff[3] = 0;
 
     if (buff[0] < '0' || buff[0] > '9')
     {
-        Serial.printf("Invalid error code, got char '%c'\n", buff[0]);
+        Serial1.printf("Invalid error code, got char '%c'\n", buff[0]);
         clear_serial_buffer();
-        
+
         return false;
     }
 
@@ -67,14 +67,14 @@ bool make_serial_request(JsonDocument &out, int timeout_ms, HttpRequestType requ
 
     if (status_code < 200 || status_code >= 300)
     {
-        Serial.println("Non-200 error code");
+        Serial1.println("Non-200 error code");
         clear_serial_buffer();
-        
+
         return false;
     }
 
-    auto result = deserializeJson(out, Serial);
-    Serial.printf("Deserialization result: %s\n", result.c_str());
+    auto result = deserializeJson(out, Serial1);
+    Serial1.printf("Deserialization result: %s\n", result.c_str());
     bool success = result == DeserializationError::Ok;
 
     return success;
@@ -96,31 +96,31 @@ bool make_binary_request(BinaryResponse* data, int timeout_ms, HttpRequestType r
     clear_serial_buffer();
 
     // TODO: Add semaphore here
-    if (!Serial.availableForWrite() || timeout_ms <= 0)
+    if (!Serial1.availableForWrite() || timeout_ms <= 0)
     {
         return false;
     }
 
-    Serial.printf("HTTP_BINARY %d %s %s\n", timeout_ms, requestType == HttpGet ? "GET" : "POST", endpoint);
+    Serial1.printf("HTTP_BINARY %d %s %s\n", timeout_ms, requestType == HttpGet ? "GET" : "POST", endpoint);
 
     unsigned long _m = millis();
-    while (!Serial.available() && millis() < _m + timeout_ms + 10) delay(1);
+    while (!Serial1.available() && millis() < _m + timeout_ms + 10) delay(1);
 
-    if (!Serial.available())
+    if (!Serial1.available())
     {
-        Serial.println("Timeout...");
-        
+        Serial1.println("Timeout...");
+
         return false;
     }
 
-    Serial.readBytes(buff, 8);
+    Serial1.readBytes(buff, 8);
     buff[9] = 0;
 
     if (buff[0] < '0' || buff[0] > '9')
     {
-        Serial.println("Invalid length");
+        Serial1.println("Invalid length");
         clear_serial_buffer(false);
-        
+
         return false;
     }
 
@@ -128,9 +128,9 @@ bool make_binary_request(BinaryResponse* data, int timeout_ms, HttpRequestType r
 
     if (data_length <= 0)
     {
-        Serial.println("0 Length");
+        Serial1.println("0 Length");
         clear_serial_buffer(false);
-        
+
         return false;
     }
 
@@ -139,13 +139,13 @@ bool make_binary_request(BinaryResponse* data, int timeout_ms, HttpRequestType r
 
     if (data->data == NULL)
     {
-        Serial.println("Failed to allocate memory");
+        Serial1.println("Failed to allocate memory");
         clear_serial_buffer(false);
-        
+
         return false;
     }
 
-    bool result = Serial.readBytes((char*)data->data, data_length) == data_length;
+    bool result = Serial1.readBytes((char*)data->data, data_length) == data_length;
     if (!result)
     {
         free(data->data);
@@ -158,7 +158,7 @@ bool make_serial_request_nocontent(HttpRequestType requestType, const char* endp
 {
     JsonDocument doc;
     make_serial_request(doc, 0, requestType, endpoint);
-    
+
     return true;
 }
 
@@ -183,7 +183,7 @@ bool SerialKlipperPrinter::fetch()
     else
     {
         klipper_request_consecutive_fail_count++;
-        if (klipper_request_consecutive_fail_count >= 5) 
+        if (klipper_request_consecutive_fail_count >= 5)
         {
             printer_data.state = PrinterStateOffline;
             return false;
@@ -213,10 +213,10 @@ PrinterDataMinimal SerialKlipperPrinter::fetch_min()
         parse_state_min(doc, &data);
         data.power_devices = get_power_devices_count();
     }
-    else 
+    else
     {
         data.state = PrinterState::PrinterStateOffline;
-        data.power_devices = get_power_devices_count();       
+        data.power_devices = get_power_devices_count();
     }
 
     return data;
@@ -242,7 +242,7 @@ int SerialKlipperPrinter::get_macros_count()
         return parse_macros_count(doc);
     }
 
-    return 0; 
+    return 0;
 }
 
 PowerDevices SerialKlipperPrinter::get_power_devices()
@@ -254,7 +254,7 @@ PowerDevices SerialKlipperPrinter::get_power_devices()
         power_devices = parse_power_devices(doc);
     }
 
-    return power_devices;   
+    return power_devices;
 }
 
 int SerialKlipperPrinter::get_power_devices_count()
@@ -265,7 +265,7 @@ int SerialKlipperPrinter::get_power_devices_count()
         return parse_power_devices_count(doc);
     }
 
-    return 0;     
+    return 0;
 }
 
 bool SerialKlipperPrinter::set_power_device_state(const char* device_name, bool state)
@@ -298,7 +298,7 @@ Files SerialKlipperPrinter::get_files()
     }
 
     parse_file_list(doc, files, MAX_FILE_LIST_SIZE);
-    
+
     files_result.available_files = (char**)malloc(sizeof(char*) * files.size());
 
     if (files_result.available_files == NULL){
@@ -318,7 +318,7 @@ Files SerialKlipperPrinter::get_files()
     files_result.success = true;
 
     LOG_F(("Heap space post-file-parse: %d bytes\n", esp_get_free_heap_size()))
-    LOG_F(("Got %d files. Request took %dms, parsing took %dms\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
+    LOG_F(("Got %d files. Request took %lums, parsing took %lums\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
     return files_result;
 }
 

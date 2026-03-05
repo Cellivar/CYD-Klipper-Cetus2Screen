@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "../nav_buttons.h"
 #include "../macros.h"
+#include "string.h"
 
 const char * printer_status[] = {
     "Offline",
@@ -15,7 +16,7 @@ const char * printer_status[] = {
     "Paused"
 };
 
-const static lv_point_t line_points[] = { {0, 0}, {(short int)((CYD_SCREEN_PANEL_WIDTH_PX - CYD_SCREEN_GAP_PX * 2) * 0.85f), 0} };
+const static lv_point_precise_t  line_points[] = { {0, 0}, {(short int)((CYD_SCREEN_PANEL_WIDTH_PX - CYD_SCREEN_GAP_PX * 2) * 0.85f), 0} };
 
 static void update_printer_name_text(lv_event_t * e)
 {
@@ -25,7 +26,7 @@ static void update_printer_name_text(lv_event_t * e)
     lv_label_set_text(label, printer->printer_config->printer_name[0] == 0 ? printer->printer_config->printer_host : printer->printer_config->printer_name);
 }
 
-static void update_printer_status_text(lv_event_t * e) 
+static void update_printer_status_text(lv_event_t * e)
 {
     lv_obj_t * label = lv_event_get_target(e);
     int config_index = (int)lv_event_get_user_data(e);
@@ -49,7 +50,7 @@ static void update_printer_label_visible_active_printer(lv_event_t * e)
     {
         lv_label_set_text(label, LV_SYMBOL_WIFI);
     }
-    else 
+    else
     {
         lv_label_set_text(label, "");
     }
@@ -65,7 +66,7 @@ static void update_printer_percentage_bar(lv_event_t * e)
     {
         lv_bar_set_value(percentage, printer->print_progress * 100, LV_ANIM_OFF);
     }
-    else 
+    else
     {
         lv_bar_set_value(percentage, 0, LV_ANIM_OFF);
     }
@@ -83,7 +84,7 @@ static void update_printer_percentage_text(lv_event_t * e)
         sprintf(percentage_buffer, "%.2f%%", printer->print_progress * 100);
         lv_label_set_text(label, percentage_buffer);
     }
-    else 
+    else
     {
         lv_label_set_text(label, "-%");
     }
@@ -115,7 +116,7 @@ static void btn_set_secondary_button_text(lv_event_t * e)
     {
         lv_label_set_text(label, LV_SYMBOL_SETTINGS);
     }
-    else 
+    else
     {
         lv_label_set_text(label, LV_SYMBOL_TRASH);
     }
@@ -269,7 +270,7 @@ void create_printer_ui(int index, lv_obj_t * root)
     lv_obj_set_style_line_color(line, lv_color_hex(0xAAAAAA), 0);
 }
 
-void printer_panel_init(lv_obj_t* panel) 
+void printer_panel_init(lv_obj_t* panel)
 {
     lv_obj_t * inner_panel = lv_create_empty_panel(panel);
     lv_obj_align(inner_panel, LV_ALIGN_TOP_LEFT, CYD_SCREEN_GAP_PX, 0);

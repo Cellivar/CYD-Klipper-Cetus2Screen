@@ -37,15 +37,15 @@ namespace serial_console
         if (!temporary_config.remote_echo)
             return;
 
-        Serial.print("\x1b[s");
-        Serial.print("\x1b[K");
+        Serial1.print("\x1b[s");
+        Serial1.print("\x1b[K");
 
         // Reprint characters from cur to end
         for (int i = cur; i < len; i++) {
-            Serial.print((char)buf[i]);
+            Serial1.print((char)buf[i]);
         }
 
-        Serial.print(" \x1b[u");
+        Serial1.print(" \x1b[u");
     }
 
     /*
@@ -62,7 +62,7 @@ namespace serial_console
         int c;         // read character, -1 if none
         int cnt = 100; // limit on amount of iterations in one go; we're supposed to be non-blocking!
 
-        while ((c = Serial.read()) != -1 && cnt > 0)
+        while ((c = Serial1.read()) != -1 && cnt > 0)
         {
             --cnt;
 
@@ -73,34 +73,34 @@ namespace serial_console
                     index--;
                     cur--;
                     // move cursor left on terminal and redraw updated string
-                    if(temporary_config.remote_echo) Serial.print("\x1b[D");
+                    if(temporary_config.remote_echo) Serial1.print("\x1b[D");
                     redraw(cur, index, result);
             // handle ANSI escape sequences (arrow keys, delete key)
             } else if (c == ESCAPE_CHAR) {
 
-                if ((c = Serial.read()) == -1)
+                if ((c = Serial1.read()) == -1)
                     break;
 
                 // Expect '[' character
                 if (c != CSI_CHAR)
                     continue;
 
-                if ((c = Serial.read()) == -1)
+                if ((c = Serial1.read()) == -1)
                     break;
 
                 // Left arrow key
                 if (c == LEFT_ARROW_CHAR && cur > 0) {
                     // move cursor left on terminal
-                    if(temporary_config.remote_echo) Serial.print("\x1b[D");
+                    if(temporary_config.remote_echo) Serial1.print("\x1b[D");
                     cur--;
                 // Right arrow key
                 } else if(c == RIGHT_ARROW_CHAR && cur < index) {
                     // move cursor right on terminal
-                    if(temporary_config.remote_echo) Serial.print("\x1b[C");
+                    if(temporary_config.remote_echo) Serial1.print("\x1b[C");
                     cur++;
                 // Delete key
                 } else if(c == DELETE_KEY_1_CHAR) {
-                    if ((c = Serial.read()) == -1)
+                    if ((c = Serial1.read()) == -1)
                         break;
                     if (c == DELETE_KEY_2_CHAR && cur < index) {
                         memmove(&result[cur], &result[cur + 1], index - cur - 1);
@@ -113,7 +113,7 @@ namespace serial_console
             } else if (c >= PRINT_CHAR_START && c <= PRINT_CHAR_END) {
                 // Append character at the end
                 if (index < max_len - 1 && cur == index) {
-                    if(temporary_config.remote_echo) Serial.print((char)c);
+                    if(temporary_config.remote_echo) Serial1.print((char)c);
                     result[index++] = c;
                     cur++;
                 // Insert character in the middl
@@ -121,7 +121,7 @@ namespace serial_console
                     memmove(&result[cur + 1], &result[cur], index - cur);
                     result[cur] = c;
                     index++;
-                    if(temporary_config.remote_echo) Serial.print((char)c);
+                    if(temporary_config.remote_echo) Serial1.print((char)c);
                     cur++;
                     redraw(cur, index, result);
                 } else if (c == delimiter) { // got delimeter: flush buffer quietly, restart collection.
@@ -132,7 +132,7 @@ namespace serial_console
             // delimiter was found
             } else if (c == delimiter) {
 
-                if(temporary_config.remote_echo) Serial.println();
+                if(temporary_config.remote_echo) Serial1.println();
                 result[index] = '\0'; // Null-terminate the string
                 index = 0;
                 cur = 0;
@@ -185,16 +185,16 @@ namespace serial_console
 
     void greet()
     {
-        Serial.println("CYD-Klipper " REPO_VERSION);
-        Serial.println("Type 'help' for serial console command list");
-        Serial.print("> ");
+        Serial1.println("CYD-Klipper " REPO_VERSION);
+        Serial1.println("Type 'help' for serial console command list");
+        Serial1.print("> ");
     }
 
     bool verify_arg_count(int got, int expected)
     {
         if (got != expected)
         {
-            Serial.printf("Command expects %d argument%s, %d given.\n", expected - 1, expected == 2 ? "" : "s", got - 1);
+            Serial1.printf("Command expects %d argument%s, %d given.\n", expected - 1, expected == 2 ? "" : "s", got - 1);
             return false;
         }
         return true;
@@ -226,7 +226,7 @@ namespace serial_console
             } while (0);
         }
 
-        Serial.print("> ");
+        Serial1.print("> ");
     }
 
 }

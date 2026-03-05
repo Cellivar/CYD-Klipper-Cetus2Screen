@@ -39,7 +39,7 @@ bool BambuPrinter::publish_mqtt_command(const char* command)
         return false;
     }
 
-    char auth[48] = {0};
+    char auth[80] = {0};
     sprintf(auth, "device/%s/request", printer_config->printer_auth);
 
     LOG_F(("Publishing MQTT Command: %s\n", command));
@@ -54,7 +54,7 @@ bool BambuPrinter::move_printer(const char* axis, float amount, bool relative)
     char gcode[64];
     const char* extra = (amount > 0) ? "+" : "";
     const char* start = "";
-    const char* end = "";
+    //const char* end = "";
 
     if (relative) {
         start = "G91\n";
@@ -130,7 +130,7 @@ bool BambuPrinter::connect()
         return false;
     }
 
-    char auth[48] = {0};
+    char auth[79] = {0};
     sprintf(auth, "device/%s/report", printer_config->printer_auth);
 
     if (!client.subscribe(auth))
@@ -198,7 +198,7 @@ Macros BambuPrinter::get_macros()
     macros.success = true;
     macros.count = get_macros_count();
     macros.macros = (char **)malloc(sizeof(char *) * macros.count);
-    
+
     macros.macros[0] = (char *)malloc(25);
     strcpy(macros.macros[0], MACRO_LOAD);
 
@@ -281,7 +281,7 @@ bool BambuPrinter::set_power_device_state(const char* device_name, bool state)
     {
         device = "chamber_light";
     }
-    else 
+    else
     {
         return false;
     }
@@ -319,7 +319,7 @@ bool BambuPrinter::set_target_temperature(PrinterTemperatureDevice device, unsig
             sprintf(gcode, "M104 S%d", temperature);
             break;
         default:
-            LOG_F(("Unknown temperature device %d was requested to heat to %.2f", device, temperature));
+            LOG_F(("Unknown temperature device %d was requested to heat to %.2u", device, temperature));
             return false;
     }
 
@@ -347,7 +347,7 @@ BambuConnectionStatus connection_test_bambu(PrinterConfiguration* config)
         return BambuConnectionStatus::BambuConnectFail;
     }
 
-    char auth[48] = {0};
+    char auth[79] = {0};
     sprintf(auth, "device/%s/report", config->printer_auth);
 
     if (!connection_test_client.subscribe(auth))

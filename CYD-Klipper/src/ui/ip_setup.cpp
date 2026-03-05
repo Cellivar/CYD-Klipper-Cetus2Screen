@@ -26,12 +26,12 @@ static const char * kb_map[] = {
     "a", "s", "d", "f", "g", "h", "j", "k", "l", LV_SYMBOL_OK, "\n",
     LV_SYMBOL_LEFT, "z", "x", "c", "v", "b", "n", "m", ".", "-", LV_SYMBOL_RIGHT, NULL
 };
-
-static const lv_btnmatrix_ctrl_t kb_ctrl[] = {
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, LV_KEYBOARD_CTRL_BTN_FLAGS | 6,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, LV_KEYBOARD_CTRL_BTN_FLAGS | 5,
-    LV_KEYBOARD_CTRL_BTN_FLAGS | 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, LV_KEYBOARD_CTRL_BTN_FLAGS | 6
+#define KB_BTN_CTRL (LV_BUTTONMATRIX_CTRL_NO_REPEAT | LV_BUTTONMATRIX_CTRL_CLICK_TRIG)
+static const lv_buttonmatrix_ctrl_t kb_ctrl[] = {
+    LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_6),
+    LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+    LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_5),
+    (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_6), LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_6)
 };
 
 static const char * hex_numpad_map[] = {
@@ -41,11 +41,11 @@ static const char * hex_numpad_map[] = {
     "0", "A", "B", "C", LV_SYMBOL_RIGHT, NULL
 };
 
-static const lv_btnmatrix_ctrl_t hex_numpad_ctrl[] = {
-    1, 1, 1, 1, LV_KEYBOARD_CTRL_BTN_FLAGS | 1,
-    1, 1, 1, 1, LV_KEYBOARD_CTRL_BTN_FLAGS | 1,
-    1, 1, 1, 1, LV_KEYBOARD_CTRL_BTN_FLAGS | 1,
-    1, 1, 1, 1, LV_KEYBOARD_CTRL_BTN_FLAGS | 1,
+static const lv_buttonmatrix_ctrl_t hex_numpad_ctrl[] = {
+    LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_1),
+    LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_1),
+    LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_1),
+    LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, LV_BUTTONMATRIX_CTRL_WIDTH_1, (lv_buttonmatrix_ctrl_t)(KB_BTN_CTRL | LV_BUTTONMATRIX_CTRL_WIDTH_1),
 };
 
 static void btn_switch_printer(lv_event_t *e){
@@ -81,7 +81,7 @@ void serial_check_connection()
 
 void switch_printer_init() {
     lv_obj_t * parent = lv_create_empty_panel(lv_scr_act());
-    lv_obj_set_style_bg_opa(parent, LV_OPA_100, 0); 
+    lv_obj_set_style_bg_opa(parent, LV_OPA_100, 0);
     lv_obj_align(parent, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_obj_set_size(parent, CYD_SCREEN_WIDTH_PX, CYD_SCREEN_HEIGHT_PX);
     lv_layout_flex_column(parent);
@@ -184,7 +184,7 @@ static void keyboard_event_ip_entry(lv_event_t * e) {
         lv_keyboard_set_textarea(kb, NULL);
         lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
     }
-    else if (code == LV_EVENT_READY) 
+    else if (code == LV_EVENT_READY)
     {
         PrinterType type = global_config.printer_config[global_config.printer_index].printer_type;
 
@@ -316,7 +316,7 @@ void show_ip_entry()
         lv_textarea_set_text(host_entry, global_config.printer_config[global_config.printer_index].printer_host);
         lv_textarea_set_text(port_entry, buff);
     }
-    else 
+    else
     {
         lv_textarea_set_text(host_entry, "");
 
@@ -330,9 +330,9 @@ void show_ip_entry()
             lv_textarea_set_text(port_entry, "80");
             global_config.printer_config[global_config.printer_index].klipper_port = 80;
         }
-        
+
         global_config.printer_config[global_config.printer_index].printer_host[0] = '\0';
-        
+
     }
 
     if (global_config.printer_config[global_config.printer_index].auth_configured)
@@ -360,6 +360,9 @@ void show_ip_entry()
 
     switch (global_config.printer_config[global_config.printer_index].printer_type)
     {
+        case PrinterType::PrinterTypeNone:
+             lv_label_set_text(main_label, "No printer type selected");
+             break;
         case PrinterType::PrinterTypeKlipper:
             lv_label_set_text(main_label, "Klipper Setup");
             lv_textarea_set_max_length(port_entry, 5);
@@ -397,7 +400,7 @@ void show_ip_entry()
             lv_obj_t * bottom_root = lv_create_empty_panel(top_root);
             lv_obj_set_width(bottom_root, CYD_SCREEN_WIDTH_PX);
             lv_obj_set_flex_grow(bottom_root, 1);
-            
+
             label = lv_label_create(bottom_root);
             lv_obj_center(label);
             lv_label_set_text(label, "Connect CYD-Klipper to a host\nrunning the CYD-Klipper server");
@@ -454,7 +457,7 @@ static inline void create_printer_type_button(lv_obj_t * root, const char * labe
 
 void choose_printer_type()
 {
-    lv_obj_t * btn;
+    //lv_obj_t * btn;
     lv_obj_clean(lv_scr_act());
     global_config.printer_config[global_config.printer_index].ip_configured = false;
     global_config.printer_config[global_config.printer_index].auth_configured = false;
@@ -473,7 +476,7 @@ void choose_printer_type()
     create_printer_type_button(root, "Klipper (Serial/USB)", printer_type_serial_klipper, false);
     create_printer_type_button(root, "Bambu (Wifi, Local) [BETA]", printer_type_bambu_local);
     create_printer_type_button(root, "Octoprint (Wifi) [BETA]", printer_type_octoprint);
-    
+
     if (global_config.wifi_configuration_skipped)
     {
         create_printer_type_button(root, "Return to WiFi configuration", return_to_wifi_configuration, false);
@@ -492,7 +495,7 @@ void ip_init(){
             show_ip_entry();
         }
     }
-    
+
     while (!global_config.printer_config[global_config.printer_index].setup_complete)
     {
         if (global_config.printer_config[global_config.printer_index].printer_type == PrinterType::PrinterTypeKlipperSerial)

@@ -139,6 +139,7 @@ bool OctoPrinter::execute_feature(PrinterFeatures feature)
                 LOG_F(("Retry error: %d\n", a));
                 return a;
             }
+            break;
         case PrinterFeatureHome:
             return post_request("/api/printer/printhead", COMMAND_HOME);
         case PrinterFeatureDisableSteppers:
@@ -205,12 +206,12 @@ bool OctoPrinter::fetch()
         deserializeJson(doc, client.getStream());
         parse_error(doc);
     }
-    else 
+    else
     {
         request_consecutive_fail_count++;
         LOG_LN("Failed to fetch printer data");
 
-        if (request_consecutive_fail_count >= 5) 
+        if (request_consecutive_fail_count >= 5)
         {
             printer_data.state = PrinterStateOffline;
             return false;
@@ -227,7 +228,7 @@ PrinterDataMinimal OctoPrinter::fetch_min()
     min.print_progress = 0;
     min.power_devices = 0;
     min.state = PrinterState::PrinterStateOffline;
-    
+
     {
         HTTPClient client;
         configure_http_client(client, "/api/printer", true, 1000, printer_config);
@@ -244,7 +245,7 @@ PrinterDataMinimal OctoPrinter::fetch_min()
             min.state = PrinterState::PrinterStateError;
             return min;
         }
-        else 
+        else
         {
             return min;
         }
@@ -260,7 +261,7 @@ PrinterDataMinimal OctoPrinter::fetch_min()
             deserializeJson(doc, client.getStream());
             min.print_progress = parse_job_state_progress(doc);
         }
-        else 
+        else
         {
             min.state = PrinterState::PrinterStateError;
         }
@@ -313,7 +314,7 @@ bool OctoPrinter::execute_macro(const char* macro)
         {
             return false;
         }
-        
+
         return post_request("/api/connection", COMMAND_DISCONNECT);
     }
 
@@ -363,7 +364,7 @@ Files OctoPrinter::get_files()
         LOG_F(("Json parse: %s\n", parseResult.c_str()))
         parse_file_list(doc, files, OCTO_FILE_FETCH_LIMIT);
     }
-    else 
+    else
     {
         return files_result;
     }
@@ -387,8 +388,8 @@ Files OctoPrinter::get_files()
     files_result.success = true;
 
     LOG_F(("Heap space post-file-parse: %d bytes\n", esp_get_free_heap_size()))
-    LOG_F(("Got %d files. Request took %dms, parsing took %dms\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
-    return files_result;   
+    LOG_F(("Got %d files. Request took %lums, parsing took %lums\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
+    return files_result;
 
     return {};
 }
@@ -416,7 +417,7 @@ bool OctoPrinter::set_target_temperature(PrinterTemperatureDevice device, unsign
     {
         doc["targets"]["tool0"] = temperature;
     }
-    else 
+    else
     {
         doc["target"] = temperature;
     }

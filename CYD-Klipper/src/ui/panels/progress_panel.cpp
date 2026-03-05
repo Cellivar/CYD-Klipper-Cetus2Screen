@@ -39,11 +39,11 @@ static void update_printer_data_stats(lv_event_t * e){
             sprintf(buff, "Layer %d of %d", get_current_printer_data()->current_layer, get_current_printer_data()->total_layers);
             break;
         case SHOW_STATS_ON_PROGRESS_PANEL_PARTIAL:
-            sprintf(buff, "Position: X%.2f Y%.2f\nFeedrate: %d mm/s\nFilament Used: %.2f m\nLayer %d of %d", 
+            sprintf(buff, "Position: X%.2f Y%.2f\nFeedrate: %d mm/s\nFilament Used: %.2f m\nLayer %d of %d",
             get_current_printer_data()->position[0], get_current_printer_data()->position[1], get_current_printer_data()->feedrate_mm_per_s, get_current_printer_data()->filament_used_mm / 1000, get_current_printer_data()->current_layer, get_current_printer_data()->total_layers);
             break;
         case SHOW_STATS_ON_PROGRESS_PANEL_ALL:
-            sprintf(buff, "Pressure Advance: %.3f (%.2fs)\nPosition: X%.2f Y%.2f Z%.2f\nFeedrate: %d mm/s\nFilament Used: %.2f m\nFan: %.0f%%\nSpeed: %.0f%%\nFlow: %.0f%%\nLayer %d of %d", 
+            sprintf(buff, "Pressure Advance: %.3f (%.2fs)\nPosition: X%.2f Y%.2f Z%.2f\nFeedrate: %d mm/s\nFilament Used: %.2f m\nFan: %.0f%%\nSpeed: %.0f%%\nFlow: %.0f%%\nLayer %d of %d",
             get_current_printer_data()->pressure_advance, get_current_printer_data()->smooth_time, get_current_printer_data()->position[0], get_current_printer_data()->position[1], get_current_printer_data()->position[2], get_current_printer_data()->feedrate_mm_per_s, get_current_printer_data()->filament_used_mm / 1000, get_current_printer_data()->fan_speed * 100, get_current_printer_data()->speed_mult * 100, get_current_printer_data()->extrude_mult * 100, get_current_printer_data()->current_layer, get_current_printer_data()->total_layers);
             break;
     }
@@ -101,7 +101,7 @@ void progress_panel_init(lv_obj_t* panel){
     {
         lv_obj_align(center_panel, LV_ALIGN_TOP_MID, 0, CYD_SCREEN_MIN_BUTTON_HEIGHT_PX+(3 * CYD_SCREEN_GAP_PX));
     }
-    else 
+    else
     {
         lv_obj_align(center_panel, LV_ALIGN_CENTER, 0, 0);
     }

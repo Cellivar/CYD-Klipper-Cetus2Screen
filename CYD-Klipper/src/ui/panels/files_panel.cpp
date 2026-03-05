@@ -33,7 +33,7 @@ static void btn_print_file_verify(lv_event_t * e)
     }
 
     selected_file = (char*)lv_event_get_user_data(e);
-    
+
     lv_obj_t * panel = lv_obj_create(lv_scr_act());
     lv_obj_set_style_pad_hor(panel, CYD_SCREEN_GAP_PX * 2, 0);
     lv_obj_set_style_pad_ver(panel, CYD_SCREEN_GAP_PX, 0);
@@ -54,24 +54,25 @@ static void btn_print_file_verify(lv_event_t * e)
 
     if (thumbnail.success)
     {
-        lv_img_dsc_t* img_header = (lv_img_dsc_t*)malloc(sizeof(lv_img_dsc_t));
+        lv_image_dsc_t* img_header = (lv_image_dsc_t*)malloc(sizeof(lv_image_dsc_t));
         lv_obj_on_destroy_free_data(panel, img_header);
 
-        memset(img_header, 0, sizeof(lv_img_dsc_t));
+        memset(img_header, 0, sizeof(lv_image_dsc_t));
         img_header->header.w = 32;
         img_header->header.h = 32;
         img_header->data_size = thumbnail.size;
-        img_header->header.cf = LV_IMG_CF_RAW_ALPHA;
+        img_header->header.cf = LV_COLOR_FORMAT_RAW_ALPHA;
         img_header->data = thumbnail.png;
 
         img = lv_img_create(top_panel);
         lv_img_set_src(img, img_header);
         lv_img_set_antialias(img, true);
-        lv_img_set_size_mode(img, LV_IMG_SIZE_MODE_REAL);
-        
+        // TODO: figure out how to translate this to lvgl 9
+        //lv_img_set_size_mode(img, LV_IMG_SIZE_MODE_REAL);
+
         if (global_config.double_size_gcode_img)
         {
-            lv_img_set_zoom(img, LV_IMG_ZOOM_NONE * 2);
+            lv_img_set_zoom(img, LV_SCALE_NONE * 2);
         }
     }
 
@@ -117,8 +118,8 @@ void files_panel_init(lv_obj_t* panel){
 
     lv_obj_t * list = lv_list_create(panel);
     lv_obj_set_style_radius(list, 0, 0);
-    lv_obj_set_style_border_width(list, 0, 0); 
-    lv_obj_set_style_bg_opa(list, LV_OPA_TRANSP, 0); 
+    lv_obj_set_style_border_width(list, 0, 0);
+    lv_obj_set_style_bg_opa(list, LV_OPA_TRANSP, 0);
     lv_obj_set_size(list, CYD_SCREEN_PANEL_WIDTH_PX, CYD_SCREEN_PANEL_HEIGHT_PX);
     lv_obj_align(list, LV_ALIGN_CENTER, 0, 0);
 
@@ -126,7 +127,7 @@ void files_panel_init(lv_obj_t* panel){
     {
         lv_obj_t * btn = lv_list_add_btn(list, LV_SYMBOL_FILE, files.available_files[i]);
         lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
-              
+
         if (global_config.full_filenames)
         {
             lv_label_set_long_mode(lv_obj_get_child(btn, 1), LV_LABEL_LONG_WRAP);

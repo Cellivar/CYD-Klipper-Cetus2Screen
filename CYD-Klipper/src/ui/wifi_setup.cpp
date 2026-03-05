@@ -89,7 +89,7 @@ void wifi_pass_entry(const char* ssid)
 
 static void wifi_btn_event_handler(lv_event_t * e){
     delay(100);
-    char* ssid = (char*)e->user_data;
+    char* ssid = (char*)lv_event_get_user_data(e);
     LOG_LN(ssid);
     wifi_pass_entry(ssid);
 }
@@ -140,11 +140,11 @@ void wifi_init_inner(){
         {
             WiFi.begin(global_config.wifi_SSID);
         }
-        else 
+        else
         {
             WiFi.begin(global_config.wifi_SSID, global_config.wifi_password);
         }
-        
+
         LOG_F(("Connecting to %s with a password length of %d\n", global_config.wifi_SSID, strlen(global_config.wifi_password)))
 
         lv_obj_t * label = lv_label_create(lv_scr_act());
@@ -161,7 +161,7 @@ void wifi_init_inner(){
         lv_obj_center(label);
 
         return;
-    } 
+    }
 
     lv_obj_t * label = lv_label_create(lv_scr_act());
     lv_label_set_text(label, "Scanning for networks...");
@@ -270,7 +270,7 @@ void wifi_init(){
             print_timer = millis();
             LOG_F(("WiFi Status: %s\n", errs[WiFi.status()]))
         }
-        
+
         lv_handler();
         serial_console::run();
     }
@@ -291,7 +291,7 @@ void wifi_ok(){
         {
             WiFi.begin(global_config.wifi_SSID);
         }
-        else 
+        else
         {
             WiFi.begin(global_config.wifi_SSID, global_config.wifi_password);
         }

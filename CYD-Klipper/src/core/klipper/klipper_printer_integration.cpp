@@ -30,9 +30,9 @@ int KlipperPrinter::get_slicer_time_estimate_s()
     configure_http_client(client, "/server/files/metadata?filename=" + urlEncode(printer_data.print_filename), true, 5000);
     int http_code = client.GET();
 
-    if (http_code != 200) 
+    if (http_code != 200)
         return 0;
-    
+
     JsonDocument doc;
     deserializeJson(doc, client.getStream());
     return parse_slicer_time_estimate(doc);
@@ -44,16 +44,16 @@ bool KlipperPrinter::send_gcode(const char *gcode, bool wait)
     configure_http_client(client, "/printer/gcode/script?script=" + urlEncode(gcode), false, wait ? 5000 : 750);
     LOG_F(("Sending gcode: %s\n", gcode))
 
-    try
-    {
+    // try
+    // {
         client.GET();
         return true;
-    }
-    catch (...)
-    {
-        LOG_LN("Failed to send gcode");
-        return false;
-    }
+    // }
+    // catch (...)
+    // {
+    //     LOG_LN("Failed to send gcode");
+    //     return false;
+    // }
 }
 
 bool KlipperPrinter::move_printer(const char* axis, float amount, bool relative)
@@ -92,15 +92,15 @@ bool KlipperPrinter::send_emergency_stop()
     HTTPClient client;
     configure_http_client(client, "/printer/emergency_stop", false, 5000);
 
-    try
-    {
+    // try
+    // {
         return client.GET() == 200;
-    }
-    catch (...)
-    {
-        LOG_LN("Failed to send estop");
-        return false;
-    }
+    // }
+    // catch (...)
+    // {
+    //     LOG_LN("Failed to send estop");
+    //     return false;
+    // }
 }
 
 bool KlipperPrinter::execute_feature(PrinterFeatures feature)
@@ -137,7 +137,7 @@ bool KlipperPrinter::execute_feature(PrinterFeatures feature)
             {
                 return send_gcode("FILAMENT_EXTRUDE");
             }
-            else 
+            else
             {
                 return send_gcode("M83\nG1 E25 F300");
             }
@@ -151,7 +151,7 @@ bool KlipperPrinter::execute_feature(PrinterFeatures feature)
             {
                 return send_gcode("FILAMENT_RETRACT");
             }
-            else 
+            else
             {
                 return send_gcode("M83\nG1 E-25 F300");
             }
@@ -192,7 +192,7 @@ bool KlipperPrinter::fetch()
         klipper_request_consecutive_fail_count++;
         LOG_F(("Failed to fetch printer data: %d\n", http_code));
 
-        if (klipper_request_consecutive_fail_count >= 5) 
+        if (klipper_request_consecutive_fail_count >= 5)
         {
             printer_data.state = PrinterStateOffline;
             return false;
@@ -228,7 +228,7 @@ PrinterDataMinimal KlipperPrinter::fetch_min()
         deserializeJson(doc, client.getStream());
         parse_state_min(doc, &data);
     }
-    else 
+    else
     {
         data.state = PrinterState::PrinterStateOffline;
         data.power_devices = get_power_devices_count();
@@ -345,7 +345,7 @@ Files KlipperPrinter::get_files()
         LOG_F(("Json parse: %s\n", parseResult.c_str()))
         parse_file_list(doc, files, KLIPPER_FILE_FETCH_LIMIT);
     }
-    else 
+    else
     {
         return files_result;
     }
@@ -369,8 +369,8 @@ Files KlipperPrinter::get_files()
     files_result.success = true;
 
     LOG_F(("Heap space post-file-parse: %d bytes\n", esp_get_free_heap_size()))
-    LOG_F(("Got %d files. Request took %dms, parsing took %dms\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
-    return files_result;    
+    LOG_F(("Got %d files. Request took %lums, parsing took %lums\n", files.size(), timer_parse - timer_request, millis() - timer_parse))
+    return files_result;
 }
 
 bool KlipperPrinter::start_file(const char *filename)
@@ -396,7 +396,7 @@ bool KlipperPrinter::set_target_temperature(PrinterTemperatureDevice device, uns
             sprintf(gcode, "M104 S%d", temperature);
             break;
         default:
-            LOG_F(("Unknown temperature device %d was requested to heat to %.2f", device, temperature));
+            LOG_F(("Unknown temperature device %d was requested to heat to %.2u", device, temperature));
             return false;
     }
 
@@ -412,15 +412,15 @@ Thumbnail KlipperPrinter::get_32_32_png_image_thumbnail(const char* gcode_filena
     unsigned char* data_png = NULL;
 
     int http_code = 0;
-    try 
-    {
+    // try
+    // {
         http_code = client.GET();
-    }
-    catch (...)
-    {
-        LOG_LN("Exception while fetching gcode img location");
-        return thumbnail;
-    }
+    // }
+    // catch (...)
+    // {
+    //     LOG_LN("Exception while fetching gcode img location");
+    //     return thumbnail;
+    // }
 
     if (http_code == 200)
     {
@@ -428,7 +428,7 @@ Thumbnail KlipperPrinter::get_32_32_png_image_thumbnail(const char* gcode_filena
         deserializeJson(doc, client.getStream());
         img_filename_path = parse_thumbnails(doc);
     }
-    else 
+    else
     {
         LOG_F(("Failed to fetch gcode image data: %d\n", http_code))
     }
@@ -448,15 +448,15 @@ Thumbnail KlipperPrinter::get_32_32_png_image_thumbnail(const char* gcode_filena
     configure_http_client(client, "/server/files/gcodes/" + urlEncode(img_filename_path), false, 2000);
 
     http_code = 0;
-    try 
-    {
+    // try
+    // {
         http_code = client.GET();
-    }
-    catch (...)
-    {
-        LOG_LN("Exception while fetching gcode img");
-        return thumbnail;
-    }
+    // }
+    // catch (...)
+    // {
+    //     LOG_LN("Exception while fwetching gcode img");
+    //     return thumbnail;
+    // }
 
     if (http_code == 200)
     {
@@ -476,7 +476,7 @@ Thumbnail KlipperPrinter::get_32_32_png_image_thumbnail(const char* gcode_filena
                 LOG_LN("Failed to read gcode img data");
                 free(data_png);
             }
-            else 
+            else
             {
                 thumbnail.png = data_png;
                 thumbnail.size = len;
@@ -502,7 +502,7 @@ KlipperConnectionStatus connection_test_klipper(PrinterConfiguration* config)
     }
 
     int http_code;
-    try {
+    //try {
         http_code = client.GET();
 
         if (http_code == 403)
@@ -511,9 +511,9 @@ KlipperConnectionStatus connection_test_klipper(PrinterConfiguration* config)
         }
 
         return http_code == 200 ? KlipperConnectionStatus::ConnectOk : KlipperConnectionStatus::ConnectFail;
-    }
-    catch (...) {
-        LOG_LN("Failed to connect");
-        return KlipperConnectionStatus::ConnectFail;
-    }
+    // }
+    // catch (...) {
+    //     LOG_LN("Failed to connect");
+    //     return KlipperConnectionStatus::ConnectFail;
+    // }
 }

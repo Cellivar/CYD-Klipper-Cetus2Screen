@@ -39,7 +39,7 @@ void create_button(const char* label, lv_event_cb_t on_click, lv_obj_t * root){
     lv_obj_center(label_obj);
 }
 
-void error_panel_init(lv_obj_t* panel) 
+void error_panel_init(lv_obj_t* panel)
 {
     lv_layout_flex_column(panel, LV_FLEX_ALIGN_SPACE_BETWEEN);
     lv_obj_set_style_pad_all(panel, CYD_SCREEN_GAP_PX, 0);

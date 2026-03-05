@@ -95,6 +95,9 @@ void data_setup()
 
             switch (global_config.printer_config[i].printer_type)
             {
+                case PrinterType::PrinterTypeNone:
+                    count++;
+                    break;
                 case PrinterType::PrinterTypeKlipper:
                     available_printers[count++] = new KlipperPrinter(i);
                     break;
@@ -110,7 +113,7 @@ void data_setup()
             }
         }
     }
-    
+
     initialize_printers(available_printers, count);
     set_current_printer(true_current_printer_index);
     LOG_F(("Free heap after printer creation: %d bytes\n", esp_get_free_heap_size()));

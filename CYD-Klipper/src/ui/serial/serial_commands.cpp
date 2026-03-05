@@ -40,26 +40,26 @@ HANDLER commandHandlers[] = {
 
 void help(String argv[])
 {
-    Serial.println("Serial console commands:");
-    Serial.println("");
-    Serial.println("settings             - show current settings");
-    Serial.println("sets                 - show current settings as commands for copy-paste");
-    Serial.println("erase [item]         - unconfigure parameter (key|touch|ssid|ip|all)");
-    Serial.println("reset                - restart CYD-klipper");
-    Serial.println("touch [xm xo ym yo]  - set touchscreen multipliers and offsets");
-    Serial.println("ssid [name pass]     - set the network SSID and password to connect to");
-    Serial.println("ip [address port]    - set Moonraker address");
-    Serial.println("key [key]            - set the Moonraker API key");
-    Serial.println("rotation [on|off]    - set rotate screen 180 degrees");
-    Serial.println("brightness [num]     - set screen brightness");
-    Serial.println("printer [num|-1]     - set active printer#; -1 for multi-printer mode off");
-    Serial.println("debug [on|off]       - set printing of debug messages to serial console (not saved)");
-    Serial.println("echo [on|off]        - set remote echo (eecchhoo ooffff) (not saved)");
-    Serial.println("help                 - this help");
-    Serial.println("");
-    Serial.println("Settings are saved immediately but come into effect after reset");
-    Serial.println("Unlike GUI, serial console does not validate if settings");
-    Serial.println("you enter work correctly. This is a double-edged sword.");
+    Serial1.println("Serial console commands:");
+    Serial1.println("");
+    Serial1.println("settings             - show current settings");
+    Serial1.println("sets                 - show current settings as commands for copy-paste");
+    Serial1.println("erase [item]         - unconfigure parameter (key|touch|ssid|ip|all)");
+    Serial1.println("reset                - restart CYD-klipper");
+    Serial1.println("touch [xm xo ym yo]  - set touchscreen multipliers and offsets");
+    Serial1.println("ssid [name pass]     - set the network SSID and password to connect to");
+    Serial1.println("ip [address port]    - set Moonraker address");
+    Serial1.println("key [key]            - set the Moonraker API key");
+    Serial1.println("rotation [on|off]    - set rotate screen 180 degrees");
+    Serial1.println("brightness [num]     - set screen brightness");
+    Serial1.println("printer [num|-1]     - set active printer#; -1 for multi-printer mode off");
+    Serial1.println("debug [on|off]       - set printing of debug messages to serial console (not saved)");
+    Serial1.println("echo [on|off]        - set remote echo (eecchhoo ooffff) (not saved)");
+    Serial1.println("help                 - this help");
+    Serial1.println("");
+    Serial1.println("Settings are saved immediately but come into effect after reset");
+    Serial1.println("Unlike GUI, serial console does not validate if settings");
+    Serial1.println("you enter work correctly. This is a double-edged sword.");
 }
 
 // this must be here, because serial_console doesn't have a clue about sizeof(commandHandlers) at compile time
@@ -67,9 +67,9 @@ int find_command(String cmd)
 {
   for(int i=0; i < sizeof(commandHandlers) / sizeof(HANDLER); ++i)
   {
-    if(cmd == commandHandlers[i].name) return i; 
+    if(cmd == commandHandlers[i].name) return i;
   }
-  Serial.println("Unknown command");
+  Serial1.println("Unknown command");
   return -1;
 }
 
@@ -82,59 +82,59 @@ void reset(String argv[])
 void sets(String argv[])
 {
 
-    Serial.printf("printer %d\n", global_config.multi_printer_mode?global_config.printer_index:-1);
+    Serial1.printf("printer %d\n", global_config.multi_printer_mode?global_config.printer_index:-1);
 
     if(global_config.wifi_configured)
     {
-        Serial.printf("ssid %s %s\n",global_config.wifi_SSID,
+        Serial1.printf("ssid %s %s\n",global_config.wifi_SSID,
 #if DISPLAY_SECRETS
         global_config.wifi_password
 #else
         "[redacted]"
-#endif    
+#endif
         );
     }
     else
     {
-        Serial.printf("erase ssid\n");
+        Serial1.printf("erase ssid\n");
     }
 
     if(get_current_printer_config()->ip_configured)
     {
-        Serial.printf("ip %s %d\n",get_current_printer_config()->printer_host, get_current_printer_config()->klipper_port);
+        Serial1.printf("ip %s %d\n",get_current_printer_config()->printer_host, get_current_printer_config()->klipper_port);
     }
     else
     {
-        Serial.printf("erase ip\n");
+        Serial1.printf("erase ip\n");
     }
 
     if(get_current_printer_config()->auth_configured)
     {
-        Serial.printf("key %s\n",
+        Serial1.printf("key %s\n",
 #if DISPLAY_SECRETS
         get_current_printer_config()->printer_auth
 #else
         "[redacted]"
-#endif    
+#endif
         );
     }
     else
     {
-        Serial.printf("erase key\n");
+        Serial1.printf("erase key\n");
     }
 
     if(global_config.screen_calibrated)
     {
-        Serial.printf("touch %f %f %f %f\n",
+        Serial1.printf("touch %f %f %f %f\n",
         global_config.screen_cal_x_mult, global_config.screen_cal_x_offset, global_config.screen_cal_y_mult, global_config.screen_cal_y_offset);
     }
     else
     {
-        Serial.printf("erase touch\n");
+        Serial1.printf("erase touch\n");
     }
 
-    Serial.printf("rotation %s\n",global_config.rotate_screen?"on":"off");
-    Serial.printf("brightness %d\n",global_config.brightness);
+    Serial1.printf("rotation %s\n",global_config.rotate_screen?"on":"off");
+    Serial1.printf("brightness %d\n",global_config.brightness);
 }
 
 void settings(String argv[])
@@ -142,67 +142,67 @@ void settings(String argv[])
 
     if(get_current_printer_config()->printer_name[0] != 0)
     {
-        Serial.printf("Current printer# %d name: %s",global_config.printer_index, get_current_printer_config()->printer_name);
+        Serial1.printf("Current printer# %d name: %s",global_config.printer_index, get_current_printer_config()->printer_name);
     }
     else
     {
-        Serial.printf("Current printer# %d",global_config.printer_index);
+        Serial1.printf("Current printer# %d",global_config.printer_index);
     }
-    Serial.printf("  Multi-printer mode %s\n",global_config.multi_printer_mode?"enabled":"disabled");
+    Serial1.printf("  Multi-printer mode %s\n",global_config.multi_printer_mode?"enabled":"disabled");
 
 
     if(global_config.wifi_configured)
     {
-        Serial.printf("SSID: %s   Password: %s\n",global_config.wifi_SSID, 
+        Serial1.printf("SSID: %s   Password: %s\n",global_config.wifi_SSID,
 #if DISPLAY_SECRETS
         global_config.wifi_password
 #else
         "[redacted]"
-#endif        
-        
+#endif
+
         );
     }
     else
     {
-        Serial.printf("Wifi not configured\n");
+        Serial1.printf("Wifi not configured\n");
     }
 
     if(get_current_printer_config()->ip_configured)
     {
-        Serial.printf("Moonraker address: %s:%d\n",get_current_printer_config()->printer_host, get_current_printer_config()->klipper_port);
+        Serial1.printf("Moonraker address: %s:%d\n",get_current_printer_config()->printer_host, get_current_printer_config()->klipper_port);
     }
     else
     {
-        Serial.printf("Moonraker address not configured\n");
+        Serial1.printf("Moonraker address not configured\n");
     }
 
     if(get_current_printer_config()->auth_configured)
     {
-        Serial.printf("Moonraker API key: %s\n",
+        Serial1.printf("Moonraker API key: %s\n",
 #if DISPLAY_SECRETS
         get_current_printer_config()->printer_auth
 #else
         "[redacted]"
-#endif        
+#endif
         );
     }
     else
     {
-        Serial.printf("Moonraker API key not configured\n");
+        Serial1.printf("Moonraker API key not configured\n");
     }
 
     if(global_config.screen_calibrated)
     {
-        Serial.printf("Screen coefficients: x_screen = %f * x_touch + %f;  y_screen = %f * y_touch + %f\n",
+        Serial1.printf("Screen coefficients: x_screen = %f * x_touch + %f;  y_screen = %f * y_touch + %f\n",
         global_config.screen_cal_x_mult, global_config.screen_cal_x_offset, global_config.screen_cal_y_mult, global_config.screen_cal_y_offset);
     }
     else
     {
-        Serial.printf("Screen not calibrated\n");
+        Serial1.printf("Screen not calibrated\n");
     }
 
-    Serial.printf("Screen orientation: %s\n",global_config.rotate_screen?"rotated":"normal");
-    Serial.printf("Screen brightness: %d\n",global_config.brightness);
+    Serial1.printf("Screen orientation: %s\n",global_config.rotate_screen?"rotated":"normal");
+    Serial1.printf("Screen brightness: %d\n",global_config.brightness);
 }
 
 
@@ -229,13 +229,13 @@ void erase_one(const String arg)
     else if(arg == "ssid")
     {
         global_config.wifi_configured = false;
-        // overwrite the pass to make it unrecoverable for 3rd parties 
+        // overwrite the pass to make it unrecoverable for 3rd parties
         memset(global_config.wifi_password,0,64);
         write_global_config();
     }
     else
     {
-        Serial.println("Unknown key");
+        Serial1.println("Unknown key");
     }
 }
 
@@ -244,7 +244,7 @@ void erase(String argv[])
     const String& arg=argv[1];
     if(arg != "all")
     {
-        erase_one(arg);   
+        erase_one(arg);
     }
     else
     {
@@ -303,7 +303,7 @@ void rotation(String argv[])
     }
     else
     {
-        Serial.println("Rotation can be on or off");
+        Serial1.println("Rotation can be on or off");
     }
 }
 
@@ -329,7 +329,7 @@ void printer(String argv[])
     }
     else
     {
-        Serial.println("Printer index out of range");
+        Serial1.println("Printer index out of range");
     }
 
 }
@@ -339,7 +339,7 @@ void debug(String argv[])
     if(argv[1] == "on")
     {
         temporary_config.debug = true;
-        
+
     }
     else if (argv[1] == "off")
     {
@@ -347,7 +347,7 @@ void debug(String argv[])
     }
     else
     {
-        Serial.println("debug can be on or off");
+        Serial1.println("debug can be on or off");
     }
 }
 
@@ -363,7 +363,7 @@ void echo(String argv[])
     }
     else
     {
-        Serial.println("Echo can be on or off");
+        Serial1.println("Echo can be on or off");
     }
 }
 

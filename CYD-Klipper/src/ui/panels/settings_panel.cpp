@@ -190,7 +190,7 @@ void settings_section_behaviour(lv_obj_t* panel)
 
     lv_obj_t * label = lv_label_create(panel);
     lv_label_set_text(label, "\nBehaviour");
-    
+
     if (is_klipper)
     {
         lv_create_custom_menu_dropdown("Estimated Time", panel, estimated_time_dropdown, estimated_time_options, get_current_printer()->printer_config->remaining_time_calc_mode, NULL, PRINTER_SPECIFIC_SETTING);
@@ -218,12 +218,12 @@ void settings_section_behaviour(lv_obj_t* panel)
 #endif
 
     lv_create_custom_menu_switch("Multi Printer Mode", panel, multi_printer_switch, global_config.multi_printer_mode);
-    
+
     if (is_klipper)
     {
         lv_create_custom_menu_switch("Disable M117 Messaging", panel, disable_m117_messaging_switch, global_config.disable_m117_messaging);
 
-        lv_create_custom_menu_switch("Custom Filament Move Macros", panel, filament_move_mode_switch, get_current_printer()->printer_config->custom_filament_move_macros, NULL, 
+        lv_create_custom_menu_switch("Custom Filament Move Macros", panel, filament_move_mode_switch, get_current_printer()->printer_config->custom_filament_move_macros, NULL,
             global_config.multi_printer_mode
                 ? "Calls FILAMENT_RETRACT and\nFILAMENT_EXTRUDE in temperature menu\nwhen enabled. Stored per printer."
                 : "Calls FILAMENT_RETRACT and\nFILAMENT_EXTRUDE in temperature menu\nwhen enabled");
@@ -253,7 +253,7 @@ void settings_section_device(lv_obj_t* panel)
     lv_create_custom_menu_dropdown("Brightness", panel, brightness_dropdown, brightness_options, brightness_settings_index);
 
 #ifndef CYD_SCREEN_DISABLE_INVERT_COLORS
-    lv_create_custom_menu_switch("Invert Colors", panel, invert_color_switch, global_config.printer_config[global_config.printer_index].invert_colors, NULL, (global_config.multi_printer_mode) ? "Stored per printer" 
+    lv_create_custom_menu_switch("Invert Colors", panel, invert_color_switch, global_config.printer_config[global_config.printer_index].invert_colors, NULL, (global_config.multi_printer_mode) ? "Stored per printer"
     #ifdef CYD_SCREEN_DRIVER_ESP32_2432S028R
         "\nIntended for the 2.8\" dual USB model screen" :  "Intended for the 2.8\" dual USB model screen"
     #else
@@ -267,7 +267,7 @@ void settings_section_device(lv_obj_t* panel)
 #endif
 
 #if defined(CYD_SCREEN_DRIVER_ESP32_SMARTDISPLAY) && !defined(CYD_SCREEN_DISABLE_TOUCH_CALIBRATION)
-    // TODO: Rotating screen requires different calibration points. 
+    // TODO: Rotating screen requires different calibration points.
 #else
     lv_create_custom_menu_switch("Rotate Screen", panel, rotate_screen_switch, global_config.rotate_screen);
 #endif

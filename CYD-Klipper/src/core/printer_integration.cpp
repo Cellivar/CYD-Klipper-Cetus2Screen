@@ -103,7 +103,7 @@ BasePrinter* get_printer(int idx)
 
 bool BasePrinter::supports_feature(PrinterFeatures feature)
 {
-    return supported_features & feature == feature;
+    return (supported_features & feature) == feature;
 }
 
 int get_current_printer_index()

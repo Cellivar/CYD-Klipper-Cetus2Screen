@@ -75,7 +75,7 @@ static void keyboard_cb_edit_move_increment(lv_event_t * e)
     {
         return;
     }
-    
+
     unsigned short* items[] = {get_current_printer()->printer_config->printer_move_x_steps, get_current_printer()->printer_config->printer_move_y_steps, get_current_printer()->printer_config->printer_move_z_steps};
     LOG_F(("Setting increment %d %d %f\n", selected_column, selected_row, increment))
     items[selected_column][selected_row] = increment * 10;
@@ -92,7 +92,7 @@ static void edit_move_increment(int column, float* idx)
     {
         selected_row = 2 - row;
     }
-    else 
+    else
     {
         selected_row = row - 3;
     }
@@ -109,7 +109,7 @@ static void x_line_button_press(lv_event_t * e) {
         edit_move_increment(0, data_pointer);
         return;
     }
-    
+
     float data = *data_pointer;
     current_printer_move_printer("X", data, true);
 }
@@ -169,14 +169,14 @@ static void home_button_click(lv_event_t * e) {
         return;
 
     current_printer_execute_feature(PrinterFeatures::PrinterFeatureHome);
-} 
+}
 
 static void disable_steppers_click(lv_event_t * e) {
     if (get_current_printer_data()->state == PrinterState::PrinterStatePrinting)
         return;
 
     current_printer_execute_feature(PrinterFeatures::PrinterFeatureDisableSteppers);
-} 
+}
 
 static void switch_to_stat_panel(lv_event_t * e) {
     lv_obj_t * panel = lv_event_get_target(e);
@@ -349,9 +349,9 @@ static void root_panel_state_update(lv_event_t * e){
 
     lv_obj_clean(panel);
 
-    if (get_current_printer_data()->homed_axis) 
+    if (get_current_printer_data()->homed_axis)
         root_panel_steppers_locked(panel);
-    else 
+    else
         root_panel_steppers_unlocked(panel);
 }
 

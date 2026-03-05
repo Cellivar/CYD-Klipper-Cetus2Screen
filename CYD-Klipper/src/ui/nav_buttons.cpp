@@ -42,7 +42,7 @@ static void update_printer_data_time(lv_event_t * e){
     unsigned long time = get_current_printer_data()->remaining_time_s;
     unsigned long hours = time / 3600;
     unsigned long minutes = (time % 3600) / 60;
-    unsigned long seconds = (time % 3600) % 60;
+    //unsigned long seconds = (time % 3600) % 60;
 
     if (hours >= 10){
         sprintf(time_buffer, "%luh", hours);
@@ -72,7 +72,7 @@ static void update_multi_printer_label(lv_event_t * e) {
     {
         lv_label_set_text_fmt(label, "%d idle", idle_count);
     }
-    else 
+    else
     {
         lv_label_set_text(label, "Printer");
     }
@@ -114,7 +114,12 @@ static void btn_click_conn(lv_event_t * e){
     nav_buttons_setup(PANEL_CONNECTING);
 }
 
-void create_button(const char* icon, const char* name, lv_event_cb_t button_click, lv_event_cb_t label_update, lv_obj_t * root){
+void create_button(
+    const char* icon,
+    const char* name,
+    lv_event_cb_t button_click,
+    lv_event_cb_t label_update,
+    lv_obj_t * root){
     lv_obj_t* btn = lv_btn_create(root);
     lv_obj_set_flex_grow(btn, 1);
 
@@ -147,11 +152,11 @@ void nav_buttons_setup(PANEL_TYPE active_panel){
     lv_obj_t * root_panel = lv_create_empty_panel(lv_scr_act());
 
 #ifdef CYD_SCREEN_VERTICAL
-    lv_obj_set_size(root_panel, CYD_SCREEN_WIDTH_PX, CYD_SCREEN_SIDEBAR_SIZE_PX); 
+    lv_obj_set_size(root_panel, CYD_SCREEN_WIDTH_PX, CYD_SCREEN_SIDEBAR_SIZE_PX);
     lv_obj_align(root_panel, LV_ALIGN_BOTTOM_LEFT, 0, 0);
     lv_layout_flex_row(root_panel, LV_FLEX_ALIGN_START, 0, 0);
 #else
-    lv_obj_set_size(root_panel, CYD_SCREEN_SIDEBAR_SIZE_PX, CYD_SCREEN_HEIGHT_PX); 
+    lv_obj_set_size(root_panel, CYD_SCREEN_SIDEBAR_SIZE_PX, CYD_SCREEN_HEIGHT_PX);
     lv_obj_align(root_panel, LV_ALIGN_TOP_LEFT, 0, 0);
     lv_layout_flex_column(root_panel, LV_FLEX_ALIGN_START, 0, 0);
 
@@ -163,7 +168,7 @@ void nav_buttons_setup(PANEL_TYPE active_panel){
         {
             create_button(LV_SYMBOL_COPY, "Idle", btn_click_files, update_printer_data_time, root_panel);
         }
-        else 
+        else
         {
             create_button(LV_SYMBOL_FILE, "Paused", btn_click_progress, update_printer_data_time, root_panel);
         }
