@@ -52,7 +52,7 @@ typedef struct {
     char printer_host[65];
     char printer_auth[65];
     unsigned int klipper_port;
-    
+
     unsigned char color_scheme;
 
     unsigned short hotend_presets[3];
@@ -96,7 +96,7 @@ typedef struct {
 
     char wifi_SSID[33];
     char wifi_password[65];
-    
+
     unsigned char brightness;
     unsigned char screen_timeout;
     unsigned char printer_index;
@@ -107,7 +107,7 @@ typedef struct {
     bool debug : 1;
     bool remote_echo : 1;
 } TemporaryConfig;
-    
+
 typedef struct {
     lv_palette_t primary_color;
     short primary_color_light;

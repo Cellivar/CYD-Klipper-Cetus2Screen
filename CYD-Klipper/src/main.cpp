@@ -10,6 +10,9 @@
 #include <Esp.h>
 #include "core/lv_setup.h"
 #include "ui/ota_setup.h"
+#ifdef HAS_BUZZER
+#include <ezBuzzer.h>
+#endif
 
 void setup() {
     Serial1.begin(115200);
@@ -29,6 +32,9 @@ void setup() {
 }
 
 void loop(){
+#ifdef HAS_BUZZER
+    buzzer.loop(); // MUST call the buzzer.loop() function in loop()
+#endif
     wifi_ok();
     data_loop();
     lv_handler();
